@@ -1,0 +1,235 @@
+{ config, pkgs, ... }:
+
+
+  let
+    unstable = import <nixpkgs-unstable> {
+      config.allowUnfree = true;
+    };
+  in
+ {
+
+  imports =
+    [ # HARDWARE SCAN
+      ./hardware-configuration.nix
+    ];
+
+  # FLAKES
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # programs.home-manager.enable = true;
+
+  # GRUB2-EFI
+  boot.loader.grub = {
+    enable = true;
+    efiSupport = true;
+    useOSProber = true;
+    # boot.loader.efi.canTouchEfiVariables = true;
+    device = "nodev";
+    gfxmodeEfi = "1366x768"; 
+    extraConfig = ''
+      # boot.loader.grub.theme = "/etc/nixos/grub-themes/custom/theme/theme.txt";
+      set gfxpayload=keep
+    '';
+  };
+
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  networking.hostName = "dex";
+  # networking.wireless.enable = true;  # WPA_SUPPLICANT
+
+  # PROXY
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  # TIME-ZONE
+  time.timeZone = "America/Sao_Paulo";
+
+  # INTER-PROP
+  i18n.defaultLocale = "en_GB.UTF-8";
+
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "pt_BR.UTF-8";
+    LC_IDENTIFICATION = "pt_BR.UTF-8";
+    LC_MEASUREMENT = "pt_BR.UTF-8";
+    LC_MONETARY = "pt_BR.UTF-8";
+    LC_NAME = "pt_BR.UTF-8";
+    LC_NUMERIC = "pt_BR.UTF-8";
+    LC_PAPER = "pt_BR.UTF-8";
+    LC_TELEPHONE = "pt_BR.UTF-8";
+    LC_TIME = "pt_BR.UTF-8";
+  };
+
+  # GNOME Desktop
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
+
+  # KEYMAP-X11
+  services.xserver.xkb = {
+    layout = "br";
+    variant = "thinkpad";
+  };
+
+  # KEYMAP
+  console.keyMap = "br-abnt2";
+
+  # CUPS
+  services.printing.enable = true;
+
+  # PIPEWIRE
+  services.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    audio.enable = true;
+    wireplumber.enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+
+    # JACK
+    # jack.enable = true;
+
+    # SESSION
+    # media-session.enable = true;
+  };
+
+  # USR/PSWRD
+  users.users.dex = {
+    isNormalUser = true;
+    description = "dex";
+    extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
+    packages = with pkgs; [
+    ];
+  };
+
+  # XDG-DESKTOP-PORTAL
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+  };
+
+  # HYPRLAND
+  programs.hyprland.enable = true;
+
+  # ZSH
+  programs.zsh.enable = true;
+
+  # BINARIOS EXTERNOS
+  programs.nix-ld.enable = true;
+
+  # UNFREE PKGS
+  nixpkgs.config.allowUnfree = true;
+
+  # BROKEN
+  # nixpkgs.config.allowBroken = true;
+
+  # SYSTEM FONTS
+  fonts = {
+    enableDefaultPackages = true;
+    fontDir.enable = true;
+
+    packages = with pkgs; [
+      pkgs.nerd-fonts.jetbrains-mono
+      pkgs.nerd-fonts.symbols-only
+      pkgs.nerd-fonts.fantasque-sans-mono
+    ];
+  };
+
+  # CURSOR
+  environment.sessionVariables = {
+    XCURSOR_THEME = "Bibata-Modern-Ice";
+    XCURSOR_SIZE = "16";
+  };
+
+  # PKGS LIST
+  environment.systemPackages = with pkgs; [
+    # SYSTEM
+
+    bibata-cursors
+    wget
+    fastfetch
+    nerdfetch
+    zsh
+    temurin-bin
+    mesa
+    gcc
+    kitty
+    wlr-randr
+    mpv
+    playerctl
+    pywal
+    git
+    lazygit
+    rustup
+    rustc
+    cargo
+    libnotify
+    xdg-utils
+    xdg-desktop-portal-hyprland
+    btop
+    unzip
+    flatpak
+    pkgs.nerd-fonts.jetbrains-mono
+    python312Packages.six
+    wineWowPackages.waylandFull
+    vimPlugins.nvim-treesitter
+    nodejs_20
+    nodePackages."@githubnext/github-copilot-cli"
+    ruff
+    python3
+
+    # APPLICATIONS
+    obsidian
+    spotify
+    discord
+    firefox-devedition
+    pkgs.gnome-tweaks
+    yazi
+    obs-studio
+
+    # HYPRLAND OwO
+    hyprland
+    hyprpaper
+    hyprlock
+    rofi
+    waybar
+    wl-clipboard
+    mako
+    slurp
+    grim
+  ];
+
+  # SUID WRAPPERS
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
+
+  # LIST SERVICES
+
+  # NETWORK
+  networking.networkmanager.enable = true;
+
+  # OpenSSH daemon.
+  services.openssh.enable = false;
+
+  # Flatpak
+  services.flatpak.enable = true;
+
+  # DBUS
+  services.dbus.enable = true;
+
+  # MAKO
+  # services.mako.enable = true;
+
+  # FIREWALL-PORTS
+  # networking.firewall.allowedTCPPorts = [ ... ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
+  # Or disable the firewall altogether.
+  # networking.firewall.enable = false;
+
+  system.stateVersion = "25.05"; # Did you read the comment?Neiii
+}

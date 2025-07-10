@@ -1,0 +1,100 @@
+* {
+  /* Default background color */
+  background-color: transparent;
+  text-color:       white;
+}
+
+
+window {
+  padding: 1em;
+
+  border-color: black;
+  border:       0px;
+  border-radius: 0px;
+
+  width:  512px; 
+  height: 434px;
+
+  background-color: grey/40%;
+
+ // background-image:~/Pictures/nini.png;
+}
+
+mainbox {
+  spacing: 0px;
+  children: [inputbar,wrapper-mode-switcher,listview];
+}
+
+element {
+  background: transparent;
+  children: [ element-icon, element-text ];
+}
+element,element-text,element-icon, button {
+    cursor: pointer;
+}
+
+inputbar {
+  margin: 0px 0px 0.5em 0em;
+  spacing: 0.4em;
+  children: [ button-dex1, entry,overlay,case-indicator, button-dex2];
+}
+
+button-dex1 {
+  expand: false;
+  content: "Nix-ROFI";
+  action: "kb-primary-paste";
+  horizontal-align: 0.5;
+}
+button-dex2 {
+  action: "kb-screenshot";
+}
+
+listview, inputbar, message {
+  padding: 0.5em;  
+  border-color: white/40%;
+  border:        1px;
+  border-radius: 0px;
+  background-color: black/0%;
+
+  columns: 3;
+  lines:   0;
+}
+listview {
+  border:       0px 0px 0px 0px;
+  border-radius: 0px 0px 0px 0px;
+}
+
+element {
+    border:  0px;
+    padding:      10px;
+    font:         "JetBrains Mono 6";
+    orientation: vertical;
+}
+element-icon {
+  size: 3em;
+}
+
+element  selected {
+  border-color: black;
+  border:       0px;
+  border-radius: 0px;
+  background-color: black;
+}
+
+element-text, element-icon {
+  font:             inherit; 
+  horizontal-align: 0.5;
+}
+
+wrapper-mode-switcher {
+    orientation: horizontal;
+
+    expand:     false;
+    spacing:    0;
+    children: [ icon-ms-ic1, mode-switcher, icon-ms-ic2 ];
+}
+
+entry {
+    placeholder: "- ???";
+    placeholder-color: black/30%;
+  }
